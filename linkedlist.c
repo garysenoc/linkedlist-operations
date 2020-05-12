@@ -55,14 +55,16 @@ void createLinkedList(int size){ // function to create linked list with specific
 }
 
 void printLinkedList(){
+	system("cls");
 	struct node *p = root;
 	int pos = 0 ;
 	while(p!=NULL){
-		printf("\n\n\nPosition no. %d\n",pos++);
+		printf("\n\nPosition no. %d\n",pos++);
 		printf("Data: %d\n",p->data);
 		printf("Address: %x\n",p->next);
 		p = p->next;
 	}
+	getch();
 }
 
 int search(int data){
@@ -76,12 +78,22 @@ int search(int data){
 }
 
 
-void insertAtPost(int pos, int num){
+void insertAtPost(int pos, int num,int size){
 	int i;
 	struct node *temp = (struct node*)malloc(sizeof(struct node)),*p; // allocate nenory for temp node;
 	
 	if(pos==0)
 		insertFront(num); // put the num in front
+	else if(pos<0 || pos > size)
+		printf("Invalid. Try again!");
+	else if(pos == size){
+		temp->data = num;
+		temp->next = NULL;
+		p = root;
+			while(p->next != NULL)
+				p = p->next;
+		p->next = temp;
+	}
 	else{
 		temp->data = num;
 		p = root;
@@ -92,35 +104,83 @@ void insertAtPost(int pos, int num){
 	}
 }
 
-void removeAtPos(int pos){
+void removeAtPos(int pos,int size){
+	struct node *p,*l;
+	
 	if(pos==0)
 		removeFront();
+		
+	for(i=0;i<pos-1;i++)
+		p = p->next;	
+	
 }
 
 void menu(){
+	system("cls");
 	printf("Linked List Operations\n");
-	printf("1. Create Linked List\n");
-	printf("2. Print Linked List\n");
-	printf("3. Insert at Pos\n");
-	printf("4. Insert at Front\n");
-	printf("5. Remove at Pos\n");
-	printf("6. Remove Item\n");
-	printf("7. Remove Front\n");
-	printf("8. Locate Index\n");
-	printf("9. Locate item\n");
-	printf("10. Sort (Ascending & Descending)\n");
-	printf("11. Exit\n");
+	printf("A. Create Linked List\n");
+	printf("B. Print Linked List\n");
+	printf("C. Insert at Pos\n");
+	printf("D. Insert at Front\n");
+	printf("E. Remove at Pos\n");
+	printf("F. Remove Item\n");
+	printf("G. Remove Front\n");
+	printf("H. Locate Index\n");
+	printf("I. Locate item\n");
+	printf("J. Sort (Ascending & Descending)\n");
+	printf("X. Exit\n");
 }
 
+char select(char c){
+	printf("\nEnter your choice: ");
+	fflush(stdin);
+	scanf("%c",&c);
+	return toupper(c);
+}
 
 int main(){
 	
-	int size;
+	int size,pos,num;
+	char opt;
 	
+	while(1){
+		menu();
+		opt = select(opt);
+		
+		switch(opt){
+			case 'A':
+				printf("Enter Size: ");
+				scanf("%d",&size);
+				createLinkedList(size);
+				break;
+			case 'B':
+				printLinkedList();
+				break;
+			case 'C':
+				printf("Enter value: ");
+				scanf("%d",&num);
+				printf("Enter position: ");
+				scanf("%d",&pos);
+				insertAtPost( pos, num,size);
+				break;
+			case 'D':
+				printf("Enter value: ");
+				scanf("%d",&num);
+				insertFront(num);
+				break;
+			case 'E':
+				break;
+			case 'F':
+				break;
+			case 'G':
+				break;
+			case 'H':
+				break;
+			case 'I':
+				break;
+		}
+	}
 	menu();
-	
-	printf("Enter size: ");
-	scanf("%d",&size);
 	
 	createLinkedList(size);
 	printLinkedList();
