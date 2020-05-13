@@ -180,10 +180,6 @@ int main(){
 				break;
 		}
 	}
-	menu();
-	
-	createLinkedList(size);
-	printLinkedList();
 	return 0;
 }
 
