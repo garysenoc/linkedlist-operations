@@ -105,15 +105,54 @@ void insertAtPost(int pos, int num,int size){
 }
 
 void removeAtPos(int pos,int size){
-	struct node *p,*l;
+	struct node *p,*temp;
+	int i;
+	p = root;
 	
 	if(pos==0)
 		removeFront();
-		
-	for(i=0;i<pos-1;i++)
-		p = p->next;	
-	
+	else if(pos==size){
+		p = root;
+		while(p->next->next!=NULL){
+		p = p->next;
+		}
+		p->next = NULL;	
+	}
+	else if(pos>0){
+		for(i=0;i<pos-1;i++)
+		p = p->next;
+	temp = p->next;
+	p->next= p->next->next;
+	free(temp);
+	}
 }
+
+int locateItem(int num){
+	int count = 0;
+	struct node *p = root;
+	
+	while(p!=NULL){
+		if(p->data == num)
+			return count;
+		p = p->next;
+		count++;
+	}
+	return -1;
+}
+
+int locateIndex(int num){
+	int count = 0;
+	struct node *p = root;
+	
+	while(p!=NULL){
+		if(count == num)
+			return p->data;
+		p = p->next;
+		count++;
+	}
+	return -1;
+}
+
 
 void menu(){
 	system("cls");
@@ -127,10 +166,17 @@ void menu(){
 	printf("G. Remove Front\n");
 	printf("H. Locate Index\n");
 	printf("I. Locate item\n");
-	printf("J. Sort (Ascending & Descending)\n");
 	printf("X. Exit\n");
 }
-
+void removeItem(int num){
+	struct node* p;
+	p = root;
+	
+	while(p->next->data!=num){
+		p = p->next;
+	}
+	p->next = p->next->next;
+}
 char select(char c){
 	printf("\nEnter your choice: ");
 	fflush(stdin);
@@ -162,21 +208,54 @@ int main(){
 				printf("Enter position: ");
 				scanf("%d",&pos);
 				insertAtPost( pos, num,size);
+				size+=1;
 				break;
 			case 'D':
 				printf("Enter value: ");
 				scanf("%d",&num);
 				insertFront(num);
+				size+=1;
 				break;
 			case 'E':
+				printf("Enter position: ");
+				scanf("%d",&num);
+				removeAtPos(num,size);
+				size -=1;
 				break;
 			case 'F':
+				printf("Enter number: ");
+				scanf("%d",&num);
+				
+				if(locateItem(num)==0)
+					removeFront();
+				
+				else if(locateItem(num)!=-1)
+					removeItem(num);
+				else
+					printf("Not found. Try again!");
+				getch();
 				break;
 			case 'G':
-				break;
-			case 'H':
+				removeFront();
+				size-=1;
 				break;
 			case 'I':
+				printf("Enter number: ");
+				scanf("%d",&num);
+				if(locateItem(num)!=-1)
+					printf("The data %d is in index %d", num, locateItem(num));
+				else
+					printf("Not found. Try again.");
+				getch();
+				break;
+			case 'H':
+				printf("Enter number: ");
+				scanf("%d",&num);
+				if(locateIndex(num)!=-1)
+					printf("The Index %d have a data: %d",num,locateIndex(num));
+				else
+					printf("Not found. Try again.");
+				getch();
 				break;
 		}
 	}
